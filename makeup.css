@@ -1,0 +1,38 @@
+svg:not(:root) { overflow: hidden; }
+svg.uxon-icon {
+    all: inherit;
+    display: inline-block;
+    fill: currentColor;
+    height: 1.5em;
+    margin: 0;
+    padding: 0;
+    stroke: currentColor;
+    stroke-width:0;
+    shape-rendering: geometricPrecision;
+    vertical-align: middle;
+    width: 1.5em;
+}
+
+[data-icon].small + svg.uxon-icon {
+    height: 1.125em;
+    width: 1.125em;
+}
+[data-icon].big + svg.uxon-icon {
+    height: 3em;
+    width: 3em;
+}
+[data-icon].huge + svg.uxon-icon {
+    height: 4.5em;
+    width: 4.5em;
+}
+
+/* http://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
+svg.uxon-sprite {
+    /*all: inherit;*/
+    /* hide the sprite from screens */
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+}
