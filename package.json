@@ -1,0 +1,29 @@
+{
+  "name": "uxon",
+  "version": "0.1.0",
+  "description": "Uxôn is a JavaScript library for an easier SVG icons management in web applications",
+  "main": "core.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuzonp/uxon.git"
+  },
+  "keywords": [
+      "icons",
+      "svg",
+      "toolkit"
+  ],
+  "author": "Thomas Girard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuzonp/uxon/issues"
+  },
+  "homepage": "https://github.com/vuzonp/uxon#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-uglify": "^0.11.0"
+  }
+}
