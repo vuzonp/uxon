@@ -6,7 +6,7 @@ module.exports = function(grunt) {
       options: {
         'known-properties': false, // SVG properties.
       },
-      src: ['./*.css'],
+      src: ['src/makeup.css'],
     },
 
     cssmin: {
@@ -16,13 +16,13 @@ module.exports = function(grunt) {
       },
       target: {
         files: {
-          'makeup.min.css': ['makeup.css'],
+          'src/makeup.min.css': ['src/makeup.css'],
         },
       },
     },
 
     jscs: {
-      src: './core.js',
+      src: 'src/core.js',
       options: {
         config: '.jscsrc',
         fix: true,
@@ -39,12 +39,12 @@ module.exports = function(grunt) {
         strict: true,
         unused: true,
       },
-      all: ['core.js'],
+      all: ['src/core.js'],
     },
 
     lintspaces: {
       all: {
-        src: ['./core.js', './makeup.css'],
+        src: ['src/core.js', 'src/makeup.css'],
         options: {
           newline: true,
           trailingspaces: true,
@@ -58,11 +58,11 @@ module.exports = function(grunt) {
     uglify: {
       all: {
         options: {
-          footer: '\n',
+          // footer: '\n',
           sourceMap: true,
         },
         files: {
-          'core.min.js': ['core.js'],
+          'src/core.min.js': ['src/core.js'],
         },
       },
     },

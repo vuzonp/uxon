@@ -1,5 +1,5 @@
 svg:not(:root) { overflow: hidden; }
-svg.uxon-icon {
+.uxon-icon {
     all: inherit;
     display: inline-block;
     fill: currentColor;
@@ -13,15 +13,15 @@ svg.uxon-icon {
     width: 1.5em;
 }
 
-[data-icon].small + svg.uxon-icon {
+[data-icon].small + .uxon-icon {
     height: 1.125em;
     width: 1.125em;
 }
-[data-icon].big + svg.uxon-icon {
+[data-icon].big + .uxon-icon {
     height: 3em;
     width: 3em;
 }
-[data-icon].huge + svg.uxon-icon {
+[data-icon].huge + .uxon-icon {
     height: 4.5em;
     width: 4.5em;
 }
