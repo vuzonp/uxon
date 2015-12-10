@@ -67,16 +67,28 @@ module.exports = function(grunt) {
       },
     },
 
+    'http-server': {
+      all: {
+        cache: 15,
+        showDir: true,
+        autoIndex: true,
+        runInBackground: false,
+        openBrowser: true,
+      },
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-csslint');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-http-server');
   grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-lintspaces');
 
   // Default task(s).
+  grunt.registerTask('local', ['http-server']);
   grunt.registerTask('lint', ['csslint', 'jshint', 'jscs', 'lintspaces']);
   grunt.registerTask('minify', ['uglify', 'cssmin']);
   grunt.registerTask('default', ['lint', 'minify']);
