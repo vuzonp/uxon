@@ -1,7 +1,3 @@
-//! uxon.js
-//! version: 0.1.0
-//! author: Thomas Girard
-//! license: MIT
 (function() {
 
     "use strict";
@@ -174,7 +170,7 @@
             // Prepares the request
             this.addHeader("Content-Type", mime);
             if ("overrideMimeType" in xhr) {
-                 xhr.overrideMimeType(mime);
+                xhr.overrideMimeType(mime);
             }
 
             if (this.cors) {
