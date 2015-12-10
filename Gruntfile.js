@@ -2,6 +2,13 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
 
+        csslint: {
+            options: {
+                "known-properties": false // SVG properties.
+            },
+            src: ["./*.css"]
+        },
+
         cssmin: {
             options: {
                 roundingPrecision: 5,
@@ -11,6 +18,14 @@ module.exports = function(grunt) {
                 files: {
                     "makeup.min.css": ["makeup.css"]
                 }
+            }
+        },
+
+        jscs: {
+            src: "./*.js",
+            options: {
+                config: ".jscsrc",
+                //fix: true,
             }
         },
 
@@ -27,9 +42,23 @@ module.exports = function(grunt) {
             all: ["core.js"]
         },
 
+        lintspaces: {
+            all: {
+                src: ["./core.js", "./makeup.css"],
+                options: {
+                    newline: true,
+                    trailingspaces: true,
+                    indentation: 'spaces',
+                    spaces: 4,
+                    showTypes: true
+                }
+            }
+        },
+
         uglify: {
             all: {
                 options: {
+                    footer: "\n",
                     sourceMap: true
                 },
                 files: {
@@ -40,11 +69,16 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.loadNpmTasks("grunt-contrib-csslint");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-jscs");
+    grunt.loadNpmTasks("grunt-lintspaces");
 
     // Default task(s).
-    grunt.registerTask("default", ["cssmin", "jshint", "uglify"]);
+    grunt.registerTask("lint", ["csslint", "jshint", "jscs", "lintspaces"]);
+    grunt.registerTask("minify", ["uglify", "cssmin"]);
+    grunt.registerTask("default", ["lint", "minify"]);
 
 };
