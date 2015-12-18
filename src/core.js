@@ -1,3 +1,5 @@
+/* Copyright (c) 2015 Thomas Girard (http://www.thomasgirard.fr/) - uxon v.0.1.0 - License: MIT */
+
 (function() {
 
   'use strict';

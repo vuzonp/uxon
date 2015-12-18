@@ -2,6 +2,22 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
+    pkg: grunt.file.readJSON('package.json'),
+
+    usebanner: {
+      dist: {
+        options: {
+          position: 'top',
+          banner: '/* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %> - <%= pkg.name %> v.<%= pkg.version %> - License: <%= pkg.license %> */',
+          linebreak: true,
+          replace: true,
+        },
+        files: {
+          src: ['src/*.js', 'src/*.css'],
+        },
+      },
+    },
+
     csslint: {
       options: {
         'known-properties': false, // SVG properties.
@@ -11,6 +27,7 @@ module.exports = function(grunt) {
 
     cssmin: {
       options: {
+        comments: 0,
         roundingPrecision: 5,
         sourceMap: true,
       },
@@ -58,7 +75,6 @@ module.exports = function(grunt) {
     uglify: {
       all: {
         options: {
-          // footer: '\n',
           sourceMap: true,
         },
         files: {
@@ -79,6 +95,7 @@ module.exports = function(grunt) {
 
   });
 
+  grunt.loadNpmTasks('grunt-banner');
   grunt.loadNpmTasks('grunt-contrib-csslint');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -90,7 +107,7 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('local', ['http-server']);
   grunt.registerTask('lint', ['csslint', 'jshint', 'jscs', 'lintspaces']);
-  grunt.registerTask('minify', ['uglify', 'cssmin']);
+  grunt.registerTask('minify', ['uglify', 'cssmin', 'usebanner']);
   grunt.registerTask('default', ['lint', 'minify']);
 
 };
