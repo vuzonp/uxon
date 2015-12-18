@@ -4,18 +4,20 @@
 
   if (!self.SVGElement) { return; } // Too old browser.
 
+  // Simple shortcut...
   var $body = document.body;
 
   // XML namespaces:
   var nsSVG = 'http://www.w3.org/2000/svg';
   var nsXLINK = 'http://www.w3.org/1999/xlink';
 
-  // Generic empty callback
+  // Generic empty callback function... in waiting the real users callbacks.
   var callback = function() { };
 
   // Helpers
-  //--------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
 
+  // DOM selectors. The results are returned in arrays.
   // http://lea.verou.me/2015/04/jquery-considered-harmful/
   function $(selectors, container) {
     return (typeof selectors === 'string') ?
@@ -27,12 +29,14 @@
     return [].slice.call((container || document).querySelectorAll(selectors));
   }
 
+  // Checks to see if an element is in the page's body.
   // https://developer.mozilla.org/en-US/docs/Web/API/Node/contains
   function isInPage(node) {
     return (node === $body) ? false : $body.contains(node);
   }
 
-  // Helper for add a new css class
+  // Assign a css class to a html element.
+  // This function is mainly used for maintain the compatibility with IE9.
   function addClass(element, cname) {
     if ('classList' in element) {
       element.classList.add(cname);
@@ -54,7 +58,9 @@
   //     }
   // }
 
-  // Represent data for custom attributes added to elements
+  // CRUD for handle data-attributes.
+  // Attributes methods are supposed to be slow, but after few benchmarks, it
+  // is not a problem here. Moreover, it is IE9 compatible...
   var MetaData = (function() {
 
     var prefix = 'data-';
@@ -80,13 +86,17 @@
       remove: function(key) {
         return this.element.removeAttribute(prefix + key);
       },
+
     };
 
     return Data;
 
   })();
 
-  // The loader of the external SVG files
+  // Loads external SVG files by detecting browser capabilities to achieve it.
+  // If successful, a callback function is called, with the root node of the SVG
+  // document in parameter. Else, an other callback function is called with an
+  // error object containing the failure message in parameter.
   var svgLoader = (function() {
 
     var errServer = 'Unable to access resource';
@@ -94,7 +104,7 @@
     var method = 'GET';
     var mime = 'image/svg+xml';
 
-    // Checks cross-domain requests from url
+    // Checks if the request calls an external resource... or not.
     function isCORS(url) {
       return (
           url.indexOf('http') >= 0 &&
@@ -102,7 +112,8 @@
       );
     }
 
-    // Convert DOMString to SVG node for IE9-10
+    // Converts a well-formed SVG string to a DOM SVG node.
+    // (In theory, it is only used by IE9 & 10)
     function textToSVG(str) {
       var svg = null;
       if (window.DOMParser) {
@@ -120,6 +131,7 @@
       return svg;
     }
 
+    // Abstract loader combining the actions involving the other loaders.
     var AbstractLoader = function(url) {
       this.cors = false;
       this.request = null;
@@ -131,6 +143,7 @@
 
     var _AbstractLoader = AbstractLoader.prototype = {
 
+      // Adds a customized header to the request
       addHeader: function(prop, value) {
         var header = new Array(2);
         header[0] = prop + '';
@@ -139,7 +152,7 @@
         return this;
       },
 
-      // Defines the actions to handle after the loading.
+      // Defines the actions to run after the loading.
       then: function(onFulfilled, onRejected) {
         if (typeof onFulfilled === 'function') {
           this.onFulfilled = onFulfilled;
@@ -150,11 +163,14 @@
         }
       },
 
+      // Sends the request.
+      // This method is specific to each loader, so it's only declared here...
       send: function() {},
 
     };
 
-    // For Gecko, Webkit, >=IE10 and IE9 for non-CORS requests.
+    // Default loader using the XMLHttpRequest object.
+    // Used by Gecko, Webkit, >=IE10 (and IE9 for non-CORS requests).
     var XhrLoader = function(url, cors) {
       AbstractLoader.call(this, url);
       this.cors = !!cors;
@@ -166,6 +182,7 @@
 
     _XhrLoader.constructor = XhrLoader;
 
+    // Implements the abstract method.
     _XhrLoader.send = function() {
 
       var onRejectedCallback = this.onRejected;
@@ -179,6 +196,11 @@
       }
 
       if (!this.cors) {
+        // For more compatibility with servers that had only a minimal
+        // configuration of the CORS protocol, this custom header is only sent
+        // in local requests.
+        // You can force this header with the `addHeader(prop, value)` method if
+        // necessary.
         this.addHeader('X-Requested-With', 'XMLHttpRequest');
       }
 
@@ -193,6 +215,7 @@
               var svg = null;
 
               // Gecko, Webkit, >=IE10
+              // Because, it is still faster when it is possible...
               if (this.responseXML &&
                   this.responseXML.documentElement &&
                   'overrideMimeType' in xhr) {
@@ -207,6 +230,8 @@
                 throw new TypeError(errSVG);
               }
 
+            // The rejection callback is encapsulated in an exception to catch
+            // any problems occured during the parsing of the svg document.
             } catch (e) {
               onRejectedCallback(e);
             }
@@ -227,7 +252,8 @@
       xhr.send();
     };
 
-    // For IE 9 CORS requests
+    // Variant loader for old browsers (uses XDomainRequest).
+    // (Normally only used by IE9 in CORS requests)
     var XdrLoader = function(url) {
       AbstractLoader.call(this, url);
       var req = this.request = new XDomainRequest();
@@ -238,6 +264,7 @@
 
     _XdrLoader.constructor = XdrLoader;
 
+    // Implements the abstract method.
     _XdrLoader.send = function() {
 
       var onRejectedCallback = this.onRejected;
@@ -265,15 +292,17 @@
         onRejectedCallback(new Error(errServer));
       };
 
+      // Not tested, but I've got to take their word for it.
       // https://developer.mozilla.org/en-US/docs/Web/API/XDomainRequest
       setTimeout(function() { xdr.send(); }, 0);
     };
 
+    // Dispatchs the request to the suitable loader
     var loader = function(url) {
       var cors = isCORS(url);
       if (!cors || ('withCredentials' in XMLHttpRequest.prototype)) {
         return new XhrLoader(url, cors);
-      } else if (typeof XDomainRequest != 'undefined') { // <=IE10
+      } else if (typeof XDomainRequest !== 'undefined') { // <=IE10
         return new XdrLoader(url);
       } else {
         throw new Error('[Uxôn] Too old browser');
@@ -285,14 +314,14 @@
   })();
 
   // Toolkit Widgets
-  //--------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
 
   // Represents a SVG sprite / Map of pictograms.
   var Sprite = (function() {
 
     var counter = 0;
 
-    // Adds a prefix to the IDs DOM pictograms
+    // Adds a prefix to the DOM identifiers of pictograms
     function prefix(element, str) {
       var pictograms = {};
       element.id = str;
@@ -312,6 +341,7 @@
       return pictograms;
     }
 
+    // The public implementation of the class.
     var Sprite = function(svg) {
       if (!(svg instanceof SVGElement)) {
         throw new TypeError('Invalid sprite element');
@@ -322,11 +352,11 @@
       svg.removeAttribute('height');
       svg.removeAttribute('width');
       addClass(svg, 'uxon');
-      addClass(svg, 'uxon-sprite');
+      addClass(svg, 'uxon-sprite'); // a visually-hidden class.
 
-      // import the element into the document
+      // Appends the element at the start of the document's body.
+      // https://code.google.com/p/chromium/issues/detail?id=349175
       if (!isInPage(svg)) {
-        // https://code.google.com/p/chromium/issues/detail?id=349175
         $body.insertBefore(svg, $body.firstChild);
       }
 
@@ -344,7 +374,7 @@
         return sprite;
       },
 
-      // Checks if the sprite contains a pictogram
+      // Checks if the sprite contains a pictogram.
       has: function(id) {
         return (
             this.pictograms[id] &&
@@ -352,18 +382,18 @@
         );
       },
 
-      // Search and find a pictogram with the name of the pictogram.
+      // Searchs and finds a pictogram with the name of the pictogram.
       find: function(name) {
         var element = $('g[id$=' + name + '], symbol[id$=' + name + ']', this.element);
         return (element) ? this.get(element.id) : null;
       },
 
-      // Get a pictogram
+      // Gets a pictogram.
       get: function(id) {
         return this.pictograms[id] || null;
       },
 
-      // Remove a pictogram
+      // Removes a pictogram.
       remove: function(id) {
         if (this.has(id)) {
           this.pictograms[id].parentNode.removeChild(this.pictograms[id]);
@@ -374,7 +404,7 @@
         return false;
       },
 
-      // Update the cache of pictograms
+      // Updates the cache of pictograms.
       update: function() {
         this.pictograms = {};
         $$('symbol[id], g[id]', this.element).forEach(function(child) {
@@ -388,7 +418,9 @@
 
   })();
 
-  // Visual reference of icons
+  // Visual reference of icons.
+  // Contributor: Plato
+  // https://en.wikipedia.org/wiki/Theory_of_Forms
   var Pictogram = function(svg) {
     if (svg instanceof SVGElement && svg.id) {
       this.element = svg;
@@ -399,29 +431,29 @@
 
   Pictogram.prototype = {
 
-    // Gets the IRI of the pictogram
+    // Gets the IRI of the pictogram.
     getIRI: function() {
       return '#' + this.element.id;
     },
 
-    // Gets the viewBox of the pictogram
+    // Gets the viewBox of the pictogram.
     getViewBox: function() {
       var svg = this.element;
       return (!!svg.viewBox.baseVal &&
-              svg.viewBox.baseVal.width > 0) ? // For Webkit
+              svg.viewBox.baseVal.width > 0) ? // Fix Webkit
           svg.viewBox.baseVal :
           svg.ownerSVGElement.viewBox.baseVal;
     },
 
   };
 
-  // Icon component
+  // Represents the displayed icons.
   var Icon = (function() {
 
     var warehouse = [];
     var key = 'uxon-id';
 
-    // Connector's templates
+    // Connectors template.
     var tplConnector = (function() {
       var svg = document.createElementNS(nsSVG, 'use');
       svg.setAttributeNS(
@@ -432,7 +464,7 @@
       return svg;
     })();
 
-    // SVG icons template
+    // SVG icons template.
     var tplShadow = (function() {
       var svg = document.createElementNS(nsSVG, 'svg');
       svg.className.baseVal = 'uxon uxon-icon';
@@ -445,18 +477,19 @@
       return warehouse[id];
     }
 
-    // Icon class
+    // The public implementation of the class.
     var Icon = function(element, meta) {
       if (!element.parentNode) {
         throw new Error("Icon's element must have a parent node");
       }
 
+      // Makes the svg icon in clonning pre-defined elements.
       this.connector = tplConnector.cloneNode();
       this.element = element;
       this.meta = meta;
       var shadow = this.shadow = tplShadow.cloneNode();
 
-      // Set the svg in the document
+      // Appends the svg in the document
       shadow.appendChild(this.connector);
       this.element.parentNode.insertBefore(
           shadow,
@@ -466,7 +499,7 @@
 
     Icon.prototype = {
 
-      // Generate the icon
+      // Generates the icon
       draw: function(pictogram) {
         if (!(pictogram instanceof Pictogram)) {
           throw new TypeError('Invalid pictogram');
@@ -477,6 +510,9 @@
             'xlink:href',
             '#' + pictogram.element.id
         );
+
+        // Force the viewBox attribute. In principle it is not necessary but in
+        // reality, the display is buggy on most browsers without it.
         var box = pictogram.getViewBox();
         this.setViewBox(
             box.x,
@@ -484,26 +520,26 @@
             box.width,
             box.height
         );
-        this.parse();
+
       },
 
-      // Get the reference size of the icon
+      // Gets the reference size of the icon
       getRefSize: function() {
         var size = this.getSize();
         return Math.max(size.height, size.width);
       },
 
-      // Get the size of the icon
+      // Gets the size of the icon
       getSize: function() {
         return this.shadow.getBoundingClientRect();
       },
 
-      // Get the viewBox of the svg shadow element
+      // Gets the viewBox of the svg shadow element
       getViewBox: function() {
         return this.shadow.viewBox.baseVal;
       },
 
-      // Force the viewbox of the icon
+      // Forces the viewbox of the icon
       setViewBox: function(x, y, width, height) {
         this.shadow.setAttribute(
             'viewBox',
@@ -513,6 +549,7 @@
 
     };
 
+    // Entry points to icons.
     return {
 
       has: function(element) {
@@ -526,7 +563,6 @@
       },
 
       load: function(element) {
-        //debugger;
         if (!element || !element.nodeType) {
           throw new TypeError('Invalid element');
         }
@@ -563,10 +599,12 @@
 
   })();
 
+  // Represents a complete collection of icons.
   var Theme = (function() {
 
     var warehouse = [];
 
+    // Checks if the size of the icon allows the use of a theme
     function checkSize(theme, icon) {
       var range = theme.sizeRange;
       var size = icon.getRefSize();
@@ -576,6 +614,9 @@
       );
     }
 
+    // Algorithm to determine the best choice between two sprites.
+    // If an icon can uses many themes, this function selects the more adapted
+    // by comparing the sizes ranges, then the nearest container of the icon.
     function selectTheme(icon, recentTheme, oldTheme) {
       if (!oldTheme) { return recentTheme; }
 
@@ -599,10 +640,12 @@
       }
     }
 
+    // Calculates the difference value between two numbers (helper).
     function diff(n1, n2) {
       return (n1 > n2) ? n1 - n2 : n2 - n1;
     }
 
+    // The public implementation of the class.
     var Theme = function(sprite) {
       this.container = $body;
       this.sizeRange = new Array(2);
@@ -615,6 +658,7 @@
 
     Theme.prototype = {
 
+      // Allows to duplicate a theme.
       clone: function() {
         var theme = new Theme(this.sprite);
         theme.setSizeRange(this.sizeRange[0], this.sizeRange[1]);
@@ -622,12 +666,14 @@
         return theme;
       },
 
+      // Applies a callback function on each icons controlled by the theme.
       forEachIcons: function(callback, thisArg) {
         $$("[data-icon][data-theme-id='" + this.id + "']", this.container).forEach(function(element) {
           callback.call(thisArg, Icon.load(element));
         });
       },
 
+      // Displays the icons in the document.
       render: function() {
         var icon;
         var pictogram;
@@ -638,7 +684,7 @@
           icon = Icon.load(element);
           _this = this;
 
-          // Verifies if the icon is available with the theme
+          // Checks if the icon is available with the theme
           if (checkSize(this, icon)) {
             if (icon.meta.has('theme-id')) {
               theme = selectTheme(this, warehouse[icon.meta.get('theme-id')]);
@@ -655,11 +701,15 @@
         }, this);
       },
 
+      // Changes the size range of the theme.
       setSizeRange: function(min, max) {
         this.sizeRange[0] = min | 0;
         this.sizeRange[1] = max | 0;
       },
 
+      // Changes the container of the theme
+      // A container is the root element of a theme, only the icons contained in
+      // this element can use the theme.
       setContainer: function(element) {
         if (element && element.nodeType && isInPage(element)) {
           this.container = element;
@@ -674,12 +724,12 @@
     return Theme;
   })();
 
-  // Public
+  // Entry points of the library
   var uxon = self.uxon = {
 
     initLoader: svgLoader,
 
-    // loads an external sprite
+    // loads an external SVG file as sprite.
     load: function(request, onFulfilled, onRejected) {
       if (!onFulfilled) { onFulfilled = callback; }
 
@@ -707,7 +757,7 @@
       loader.send();
     },
 
-    // Uses local sprites
+    // Loads a sprite already presents in the page.
     make: function(svg, onFulfilled, onRejected) {
       var theme;
       if (!onFulfilled) { onFulfilled = callback; }
