@@ -86,6 +86,8 @@ module.exports = function(grunt) {
     'http-server': {
       all: {
         cache: 15,
+        host: "0.0.0.0",
+        port: 8080,
         showDir: true,
         autoIndex: true,
         runInBackground: false,
