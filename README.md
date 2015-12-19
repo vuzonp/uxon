@@ -3,7 +3,7 @@ Uxôn is a JavaScript library for an easier SVG icons management in web applicat
 
 **[&#x21FE; Watch online demo.](http://jsbin.com/depefi/edit?html,css,js,output)**
 
-*This file is also available [in french](https://github.com/vuzonp/uxon/blob/master/README.fr.md).*
+*This file is also available [in french](./README.fr.md).*
 
 ## Specifications
 
