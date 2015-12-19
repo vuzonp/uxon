@@ -73,7 +73,7 @@ Une fois la librairie installée, il vous suffit de la charger dans les pages ht
 
 ### Les thèmes d'icônes
 
-Uxôn propose un thème d'icônes libres par défaut : [Gonfanôn](https://github.com/vuzonp/gonfanon-icons).
+Uxôn est accompagné par défaut d'un thème d'icônes gratuit : [Gonfanôn](https://github.com/vuzonp/gonfanon-icons).
 
 **Ce thème est installé automatiquement si vous utilisez Bower.**
 
