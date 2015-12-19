@@ -1,6 +1,8 @@
 #![Logotype (paper hen)](https://i.imgur.com/cAeI3W3.png) Uxôn Library
 Uxôn is a JavaScript library for an easier SVG icons management in web applications.
 
+**[&#x21FE; Watch online demo.](http://jsbin.com/depefi/edit?html,css,js,output)**
+
 *This file is also available [in french](https://github.com/vuzonp/uxon/blob/master/README.fr.md).*
 
 ## Specifications

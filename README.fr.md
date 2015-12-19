@@ -2,6 +2,8 @@
 
 **Uxôn** est une librairie JavaScript destinée à faciliter l'intégration d'icônes SVG au sein des pages web.
 
+**[&#x21FE; Voir la démo en ligne](http://jsbin.com/depefi/edit?html,css,js,output)**
+
 ## Caractéristiques
 
 - Chargement asynchrone des thèmes d'icônes ;
