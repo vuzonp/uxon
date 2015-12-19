@@ -2,7 +2,6 @@
 
 svg:not(:root) { overflow: hidden; }
 .uxon-icon {
-    all: inherit;
     display: inline-block;
     fill: currentColor;
     height: 1.5em;
@@ -30,7 +29,6 @@ svg:not(:root) { overflow: hidden; }
 
 /* http://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
 .uxon-sprite {
-    /*all: inherit;*/
     /* hide the sprite from screens */
     position: absolute;
     height: 1px; width: 1px;
