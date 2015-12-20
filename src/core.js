@@ -670,9 +670,19 @@
 
       // Applies a callback function on each icons controlled by the theme.
       forEachIcons: function(callback, thisArg) {
-        $$("[data-icon][data-theme-id='" + this.id + "']", this.container).forEach(function(element) {
+        $$('[data-icon][data-theme-id="' + this.id + '"]', this.container).forEach(function(element) {
           callback.call(thisArg, Icon.load(element));
         });
+      },
+
+      // Returns an array of icons which use the same pictogram
+      getIconsByName: function(name) {
+        var icons = [];
+        $$('[data-icon="' + name + '"][data-theme-id="' + this.id + '"]', this.container).forEach(function(element) {
+          icons.push(Icon.load(element));
+        });
+
+        return icons;
       },
 
       // Displays the icons in the document.
@@ -729,6 +739,10 @@
   // Entry points of the library
   var uxon = self.uxon = {
 
+    // Provides a direct access to the icons
+    icons: Icon,
+
+    // Allows to use a custom loader
     initLoader: svgLoader,
 
     // loads an external SVG file as sprite.
