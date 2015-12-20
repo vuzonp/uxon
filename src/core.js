@@ -746,18 +746,14 @@
     initLoader: svgLoader,
 
     // loads an external SVG file as sprite.
-    load: function(request, onFulfilled, onRejected) {
+    load: function(loader, onFulfilled, onRejected) {
       if (!onFulfilled) { onFulfilled = callback; }
 
       if (!onRejected) { onRejected = callback; }
 
-      var loader;
-
-      if (typeof request === 'string') {
-        loader = svgLoader(request);
-      } else if (request instanceof SVGLoaderInterface) {
-        loader = request;
-      } else {
+      if (typeof loader === 'string') {
+        loader = svgLoader(loader);
+      } else if (!loader || !loader.request) {
         onRejected(new TypeError('Invalid Request'));
       }
 
