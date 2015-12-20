@@ -655,7 +655,6 @@
 
       this.id = (warehouse.push(this)) - 1;
       this.setSizeRange(-1, -1);
-      this.render();
     };
 
     Theme.prototype = {
@@ -747,8 +746,6 @@
 
     // loads an external SVG file as sprite.
     load: function(loader, onFulfilled, onRejected) {
-      if (!onFulfilled) { onFulfilled = callback; }
-
       if (!onRejected) { onRejected = callback; }
 
       if (typeof loader === 'string') {
@@ -770,9 +767,17 @@
     },
 
     // Loads a sprite already presents in the page.
+    // This method autorun the render of the icons if none onFulfilled callback
+    // function exist. Else, the user must call the theme.render() action for
+    // display the icons.
     make: function(svg, onFulfilled, onRejected) {
       var theme;
-      if (!onFulfilled) { onFulfilled = callback; }
+      var autorun = false;
+
+      if (!onFulfilled) {
+        onFulfilled = callback;
+        autorun = true;
+      }
 
       if (!onRejected) { onRejected = callback; }
 
@@ -780,6 +785,9 @@
         var sprite = new Sprite(svg);
         theme = new Theme(sprite);
         onFulfilled(theme);
+        if (autorun) {
+          theme.render();
+        }
       } catch (e) {
         onRejected(e);
       }
