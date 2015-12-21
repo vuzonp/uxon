@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 Thomas Girard (http://www.thomasgirard.fr/) - uxon v.1.0.0 - License: MIT */
+/* Copyright (c) 2015 Thomas Girard (http://www.thomasgirard.fr/) - uxon v.1.0.0-rc.1 - License: MIT */
 
 (function() {
 

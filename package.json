@@ -1,6 +1,6 @@
 {
   "name": "uxon",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "description": "Uxôn is a JavaScript library for an easier SVG icons management in web applications",
   "main": "",
   "scripts": {
