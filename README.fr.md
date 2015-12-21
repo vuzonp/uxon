@@ -10,7 +10,7 @@
 - Intégration simplifiée des icônes ;
 - Possibilité de charger plusieurs thèmes par pages ;
 - Possibilité de limiter un thème d'icônes à une zone spécifique ;
-- Léger 21,7 kio (7,6 kio minifié / 2,8 kio avec gzip) ;
+- Léger 21,8 kio (7,56 kio minifié / 2,8 kio avec gzip) ;
 - Respect des standards *HTML5*, *CSS3* et *EcmaScript5* (ES5).
 
 ### À Venir...
