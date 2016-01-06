@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       dist: {
         options: {
           position: 'top',
-          banner: '/* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %> - <%= pkg.name %> v.<%= pkg.version %> - License: <%= pkg.license %> */',
+          banner: '/* Copyright (c) 2015-<%= grunt.template.today("yyyy") %> <%= pkg.author %> - <%= pkg.name %> v.<%= pkg.version %> - License: <%= pkg.license %> */',
           linebreak: true,
           replace: true,
         },
