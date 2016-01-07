@@ -10,9 +10,6 @@
 
   <!-- Copyright (c) 2015 Thomas Girard (http://www.thomasgirard.fr/) - Uxôn Logotype - License: http://creativecommons.org/licenses/by-nc-nd/4.0/ -->
 
-  <title>Uxôn Logotype</title>
-  <desc>Represents a paper hen</desc>
-
   <metadata>
     <rdf:RDF
       xmlns:rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -39,6 +36,8 @@
       <polygon points="16,8 17,9 12,12" fill-opacity=".35" fill="#000" />
     </symbol>
     <symbol id="icon-logo">
+      <title>Uxôn Logotype</title>
+      <desc>Represents a paper hen</desc>
       <g>
         <polygon points="12,4 20,4 12,12" fill-opacity=".6" />
         <polygon points="12,4 16,8 12,12" />

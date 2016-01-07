@@ -426,6 +426,19 @@
   var Pictogram = function(svg) {
     if (svg instanceof SVGElement && svg.id) {
       this.element = svg;
+
+      // Prepares descriptive elements contributing to accessibility
+      var title = this.title = svg.getElementsByTagName('title').item(0);
+      var desc = this.desc = svg.getElementsByTagName('desc').item(0);
+
+      if (title && !title.id) {
+        title.id = svg.id + '-title';
+      }
+
+      if (desc && !desc.id) {
+        desc.id = svg.id + '-desc';
+      }
+
     } else {
       throw new Error('Invalid pictogram element');
     }
@@ -455,6 +468,20 @@
     var warehouse = [];
     var key = 'uxon-id';
 
+    // Moves the aria properties of an element to an other element
+    function moveAriaProps(ref, target) {
+      var attr;
+      var attrs = ref.attributes;
+      var n = attrs.length - 1;
+      for (; n > -1; --n) {
+        attr = attrs[n];
+        if (attr.nodeName.indexOf('aria-') > -1) {
+          target.setAttribute(attr.nodeName, attr.value);
+          ref.removeAttribute(attr.nodeName);
+        }
+      }
+    }
+
     // Connectors template.
     var tplConnector = (function() {
       var svg = document.createElementNS(nsSVG, 'use');
@@ -470,6 +497,7 @@
     var tplShadow = (function() {
       var svg = document.createElementNS(nsSVG, 'svg');
       svg.className.baseVal = 'uxon uxon-icon';
+      svg.setAttribute('role', 'img');
       return svg;
     })();
 
@@ -490,6 +518,12 @@
       this.element = element;
       this.meta = meta;
       var shadow = this.shadow = tplShadow.cloneNode();
+
+      // Accessibility: specifies the element as an image
+      // see: http://www.w3.org/wiki/SVG_Accessibility/ARIA_roles_for_graphics#icon
+      // see: http://www.w3.org/TR/wai-aria/roles
+      moveAriaProps(element, shadow);
+      element.setAttribute('aria-hidden', 'true');
 
       // Appends the svg in the document
       shadow.appendChild(this.connector);
@@ -522,6 +556,15 @@
             box.width,
             box.height
         );
+
+        // Adds accessibility informations
+        if (pictogram.title && !this.shadow.hasAttribute('aria-label')) {
+          this.shadow.setAttribute('aria-labelledby', pictogram.title.id);
+        }
+
+        if (pictogram.desc) {
+          this.shadow.setAttribute('aria-describedby', pictogram.desc.id);
+        }
 
         // Applies effects.
         if (this.meta.has('rotate')) {
