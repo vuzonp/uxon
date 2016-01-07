@@ -523,6 +523,88 @@
             box.height
         );
 
+        // Applies effects.
+        if (this.meta.has('rotate')) {
+          this.rotate(this.meta.get('rotate'));
+        }
+
+        if (this.meta.has('flip-x')) {
+          this.flipX();
+        }
+
+        if (this.meta.has('flip-y')) {
+          this.flipY();
+        }
+
+        if (this.meta.has('translate')) {
+          this.translate(this.meta.get('translate').split(','));
+        }
+
+        if (this.meta.has('matrix')) {
+          this.matrix(this.meta.get('matrix').split(','));
+        }
+
+      },
+
+      // Applies a new transformation to the icon.
+      addTransform: function(prop, values) {
+        var connector = this.connector;
+        var tfmStr = connector.getAttribute('transform');
+        var inline = prop + '(' + values.join(',') + ')';
+        if (tfmStr) {
+          tfmStr += ' ' + inline;
+        } else {
+          tfmStr = inline;
+        }
+
+        connector.setAttribute('transform', tfmStr);
+      },
+
+      // Erases all the transformations.
+      clearTransform: function() {
+        this.connector.removeAttribute('transform');
+      },
+
+      // Flips horizontally the icon.
+      flipX: function(refresh) {
+        var x = this.getViewBox().width * -1;
+        var y = 0;
+        this.addTransform('scale', [-1, 1], refresh);
+        this.addTransform('translate', [x, y], refresh);
+      },
+
+      // Flips vertically the icon.
+      flipY: function(refresh) {
+        var x = 0;
+        var y = this.getViewBox().height * -1;
+        this.addTransform('scale', [1, -1], refresh);
+        this.addTransform('translate', [x, y], refresh);
+      },
+
+      // Rotates the icon.
+      rotate: function(a) {
+        var vb = this.getViewBox();
+        this.addTransform(
+          'rotate',
+          [parseFloat(a), vb.width / 2, vb.height / 2]
+        );
+      },
+
+      // Moves the icon.
+      translate: function(pos) {
+        var style = this.shadow.style;
+        var tfmStr = style.transform || style.msTransform || style.webkitTransform || style.oTransform || '';
+
+        if (tfmStr) {
+          tfmStr += ' ';
+        }
+
+        tfmStr += 'translate(' + pos.join(',') + ')';
+
+        style.msTransform = tfmStr;
+        style.oTransform = tfmStr;
+        style.webkitTransform = tfmStr;
+        style.transform = tfmStr;
       },
 
       // Gets the reference size of the icon
