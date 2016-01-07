@@ -8,16 +8,16 @@
 
 - Chargement asynchrone des thèmes d'icônes ;
 - Intégration simplifiée des icônes ;
+- Transformations (rotations et symétries) ;
 - Possibilité de charger plusieurs thèmes par pages ;
 - Possibilité de limiter un thème d'icônes à une zone spécifique ;
-- Léger 21,8 kio (7,56 kio minifié / 2,8 kio avec gzip) ;
+- Léger (moins de 10kio dans sa version minifiée);
 - Respect des standards *HTML5*, *CSS3* et *EcmaScript5* (ES5).
+- Accessibilté par WAI-ARIA (texte alternatif).
 
 ### À Venir...
 
-- Transformations (rotations et symétries) ;
 - Nuancier de couleurs personnalisable ;
-- Accessibilté avancée (texte alternatif).
 
 ## Compatibilité
 
