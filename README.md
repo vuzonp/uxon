@@ -11,14 +11,14 @@ Uxôn is a JavaScript library for an easier SVG icons management in web applicat
 - Easy integration of the icons;
 - Possibility of loading several themes by pages;
 - Possibility to limit an icon theme to a specific area;
+- Transformations (rotations and symmetries);
+- Advanced Accessibility (alternative text with WAI-ARIA).
 - Light (less than 10kio minified);
 - Standards compliance: *HTML5*, *CSS3* and *EcmaScript5* (ES5).
 
 ## Roadmap
 
-- Transformations (rotations and symmetries);
 - Customizable colorschemes;
-- Advanced Accessibility (alternative text).
 
 ## Compatibility
 
