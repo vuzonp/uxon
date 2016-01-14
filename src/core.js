@@ -769,7 +769,7 @@
 
     // Calculates the difference value between two numbers (helper).
     function diff(n1, n2) {
-      return (n1 > n2) ? n1 - n2 : n2 - n1;
+      return Math.max(n1, n2) - Math.min(n1, n2);
     }
 
     // The public implementation of the class.
