@@ -1,0 +1,9 @@
+{
+  "browser": true,
+  "curly": true,
+  "forin": true,
+  "freeze": true,
+  "quotmark": "double",
+  "strict": true,
+  "unused": true
+}

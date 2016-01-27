@@ -5,6 +5,7 @@
   "main": "dist/uxon.js",
   "scripts": {
     "build": "node ./bin/builder.js",
+    "linter": "./node_modules/.bin/jshint --verbose ./lib/core.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,6 +29,7 @@
   },
   "homepage": "https://github.com/vuzonp/uxon#readme",
   "devDependencies": {
+    "jshint": "^2.9.1",
     "systemjs": "^0.19.17",
     "systemjs-builder": "^0.15.5"
   }
