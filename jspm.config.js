@@ -12,7 +12,7 @@ SystemJS.config({
 
   packages: {
     "uxon": {
-      main: "main.js"
+      "main": "main.js"
     }
   }
 });
