@@ -4,7 +4,11 @@
   "description": "Uxôn is a JavaScript library for an easier SVG icons management in web applications",
   "main": "dist/uxon.js",
   "scripts": {
-    "build": "node ./bin/builder.js",
+    "build": "npm run build-css && npm run build-js",
+    "build-css": "./node_modules/.bin/csso lib/makeup.css dist/uxon.css --stat",
+    "build-js": "npm run linter && npm run bundle && npm run build-js-sfx",
+    "build-js-sfx": "./node_modules/.bin/jspm build uxon dist/uxon-standalone.js --minify --skip-source-maps --format umd --global-name uxon",
+    "bundle": "./node_modules/.bin/jspm bundle lib/main.js dist/uxon.js --minify",
     "linter": "./node_modules/.bin/jshint --verbose ./lib/core.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,8 +33,16 @@
   },
   "homepage": "https://github.com/vuzonp/uxon#readme",
   "devDependencies": {
+    "csso": "^1.5.4",
     "jshint": "^2.9.1",
-    "systemjs": "^0.19.17",
-    "systemjs-builder": "^0.15.5"
+    "jspm": "^0.17.0-beta.5"
+  },
+  "jspm": {
+    "directories": {
+      "lib": "lib"
+    },
+    "devDependencies": {
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.2"
+    }
   }
 }

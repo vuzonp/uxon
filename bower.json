@@ -2,8 +2,8 @@
   "name": "uxon",
   "description": "Uxôn is a JavaScript library for an easier SVG icons management in web applications",
   "main": [
-    "src/core.js",
-    "src/makeup.css"
+    "dist/uxon-standalone.js",
+    "dist/makeup.css"
   ],
   "authors": [
     "Thomas Girard (http://www.thomasgirard.fr/)"
@@ -25,11 +25,14 @@
   ],
   "ignore": [
     "bower_components",
-    "node_modules",
     "examples",
+    "jspm_packages",
+    "lib",
+    "node_modules",
     ".gitignore",
-    ".jscsrc",
-    "Gruntfile.js",
+    ".jshintrc",
+    "jspm.browser.js",
+    "jspm.config.js",
     "package.json"
   ],
   "dependencies": {

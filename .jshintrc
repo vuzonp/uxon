@@ -1,9 +1,10 @@
 {
+  "esversion": 6,
   "browser": true,
   "curly": true,
   "forin": true,
   "freeze": true,
   "quotmark": "double",
-  "strict": true,
+  "strict": "implied",
   "unused": true
 }
