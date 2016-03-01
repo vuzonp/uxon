@@ -41,8 +41,15 @@
     "directories": {
       "lib": "lib"
     },
+    "dependencies": {
+      "es6-symbol": "npm:es6-symbol@^3.0.2",
+      "weakmap": "npm:weakmap@^0.0.6"
+    },
     "devDependencies": {
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.2"
+    },
+    "peerDependencies": {
+      "process": "github:jspm/nodelibs-process@^0.2.0-alpha"
     }
   }
 }
