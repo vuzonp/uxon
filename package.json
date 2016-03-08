@@ -7,8 +7,8 @@
     "build": "npm run build-css && npm run build-js",
     "build-css": "./node_modules/.bin/csso lib/makeup.css dist/uxon.css --stat",
     "build-js": "npm run linter && npm run bundle && npm run build-js-sfx",
-    "build-js-sfx": "./node_modules/.bin/jspm build uxon dist/uxon-standalone.js --minify --skip-source-maps --format umd --global-name uxon",
-    "bundle": "./node_modules/.bin/jspm bundle lib/main.js dist/uxon.js --minify",
+    "build-js-sfx": "./node_modules/.bin/jspm build uxon dist/uxon-standalone.js --minify --format umd --global-name uxon",
+    "bundle": "./node_modules/.bin/jspm bundle lib/main.js dist/uxon-bundle.js --minify",
     "linter": "./node_modules/.bin/jshint --verbose ./lib/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -42,7 +42,6 @@
       "lib": "lib"
     },
     "dependencies": {
-      "es6-symbol": "npm:es6-symbol@^3.0.2",
       "weakmap": "npm:weakmap@^0.0.6"
     },
     "devDependencies": {
