@@ -37,3 +37,6 @@ For test it :
 $ ./node_modules/.bin/http-server
 ```
 And load the test.html page !
+
+---
+You can also play with the old version : [1.0.0-rc.2](https://github.com/vuzonp/uxon/tree/1.0.0)
