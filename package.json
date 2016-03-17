@@ -1,6 +1,6 @@
 {
   "name": "uxon",
-  "version": "1.0.0-rc.3",
+  "version": "1.1.0-beta",
   "description": "Uxôn is a JavaScript library for an easier SVG icons management in web applications",
   "main": "dist/uxon.js",
   "scripts": {
@@ -33,10 +33,10 @@
   },
   "homepage": "https://github.com/vuzonp/uxon#readme",
   "devDependencies": {
-    "csso": "^1.5.4",
+    "csso": "^1.7.1",
     "http-server": "^0.9.0",
     "jshint": "^2.9.1",
-    "jspm": "^0.17.0-beta.5"
+    "jspm": "^0.17.0-beta.11"
   },
   "jspm": {
     "directories": {
