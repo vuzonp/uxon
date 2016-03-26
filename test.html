@@ -1,43 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
     <meta charset="utf-8">
-    <title>Uxôn - DEMO</title>
-    <link rel="stylesheet" href="lib/makeup.css" media="screen" charset="utf-8" />
+    <title>Uxôn Library - Demo</title>
+
+    <link rel="stylesheet" href="./dist/uxon.css" media="screen" title="no title" charset="utf-8" />
+
+    <style media="screen">
+      body {
+        background: #fff;
+        color: #170b28;
+        font-family: sans-serif;
+        font-size: 1em;
+        line-height: 1.4em;
+      }
+
+      label {
+        margin-right: 1em;
+      }
+
+      input[type=text] {
+        padding: 0 .7em;
+      }
+
+      .fieldset {
+        border: 1px solid #dedbe3;
+        padding: .7em;
+        padding: calc(.7em -1px);
+        margin: .7em;
+      }
+      .fieldset__widget {
+        display: flex;
+        font-size: .875em;
+        font-weight: 300;
+        line-height: 2.8em;
+        margin: .7em 0;
+      }
+      .fieldset__widget__item {
+        flex: auto;
+      }
+      .sandbox {
+        line-height: 1.4em;
+        color: #162d50;
+      }
+    </style>
+
     <script src="jspm_packages/system.js" charset="utf-8"></script>
     <script src="jspm.browser.js" charset="utf-8"></script>
     <script src="jspm.config.js" charset="utf-8"></script>
+
   </head>
   <body>
-    <div id="sandbox">
-      <span data-icon="home" data-rotate="45"></span>
-      <span data-icon="large-arr" data-flip-x></span>
-    </div>
-    <div id="state">loading...</div>
 
+    <!-- Sandbox -->
+    <figure>
+      <div class="sandbox" id="sandbox">
+        <span data-icon="home"></span> This is an icon, isn't it ?
+      </div>
+      <figcaption>
+          <code>
+            &lt;span data-icon="<span id="ex-name">home</span>"
+            <span id="ex-flipx"></span>
+            <span id="ex-flipy"></span>
+            <span id="ex-angle"></span>&gt;&lt;/span&gt;
+          </code>
+      </figcaption>
+    </figure>
+
+    <div class="fieldset">
+
+      <div class="fieldset__widget">
+        <label for="tb_w5">Icon Name</label>
+        <input type="text" value="home" name="tb_w5" id="tb_w5" required />
+      </div>
+
+      <div class="fieldset__widget fieldset__range">
+        <label for="tb_w1">Font Size</label>
+        <input id="tb_w1" type="range" name="size_range" value="1" min=".75" max="6" />
+      </div>
+
+      <div class="fieldset__widget fieldset__range">
+        <label for="tb_w2">Rotation</label>
+        <input id="tb_w2" type="range" name="rotation" value="0" min="-180" max="180" step="10" />
+      </div>
+
+      <div class="fieldset__widget">
+        <div class="fieldset__widget__item">
+          <label for="tb_w3">Flip X</label>
+          <input type="checkbox" name="tb_w3" id="tb_w3" value="x" />
+        </div>
+        <div class="fieldset__widget__item">
+          <label for="tb_w4">Flip Y</label>
+          <input type="checkbox" name="tb_w4" id="tb_w4" value="y" />
+        </div>
+      </div>
+
+    </div>
+
+    <!-- The script -->
     <script type="text/javascript">
-      var state = document.getElementById("state");
 
       System.import("uxon").then(function(uxon) {
-        state.textContent = (uxon) ? "ok!" : "failed";
-        console.log(uxon);
-
-        uxon.load(
-          "bower_components/gonfanon-icons/gonfanon.min.svg",
-          {
-            autorun: true,
-            container: document.getElementById("sandbox")
-          }
-        ).then(function(theme) {
+        uxon.load("./bower_components/gonfanon-icons/gonfanon.min.svg").then(function(theme) {
           console.log(theme);
+          theme.render();
+
+          var icon = theme.findOne("home");
+          var sandbox = document.getElementById("sandbox");
+
+          var exAngle = document.getElementById("ex-angle");
+          var exName = document.getElementById("ex-name");
+          var exFlipX = document.getElementById("ex-flipx");
+          var exFlipY = document.getElementById("ex-flipy");
+
+          var tbw1 = document.getElementById("tb_w1");
+          var tbw2 = document.getElementById("tb_w2");
+          var tbw3 = document.getElementById("tb_w3");
+          var tbw4 = document.getElementById("tb_w4");
+          var tbw5 = document.getElementById("tb_w5");
+
+          // Resizes the icon
+          tbw1.addEventListener("input", function(ev) {
+            var size = tbw1.value;
+            sandbox.style.fontSize = size + "em";
+          }, false);
+
+          // Rotates the icon
+          tbw2.addEventListener("input", function(ev) {
+            var a = tbw2.value
+            icon.transform().rotate(a);
+            exAngle.textContent = " data-rotate=\"" + a + "\"";
+          }, false);
+
+          // Flip X
+          tbw3.addEventListener("change", function(ev) {
+            icon.transform().flipX();
+            if (tbw3.checked === false) {
+              exFlipX.textContent = "";
+            } else {
+              exFlipX.textContent = " data-flip-x";
+            }
+          }, false);
+
+          // Flip Y
+          tbw4.addEventListener("change", function(ev) {
+            icon.transform().flipY();
+            if (tbw4.checked === false) {
+              exFlipY.textContent = "";
+            } else {
+              exFlipY.textContent = " data-flip-y";
+            }
+          }, false);
+
+          tbw5.addEventListener("input", function(ev) {
+            var name = tbw5.value
+            var picto = theme.sprite.findPictogram(name);
+            if (picto) {
+              icon.draw(picto);
+              exName.textContent = name;
+            }
+          }, false);
+
+
         }, function(e) {
           throw e;
         });
-
-      }, function(e) {
+      }).catch(function(e) {
         throw e;
       });
 
+
+
     </script>
+
   </body>
 </html>
