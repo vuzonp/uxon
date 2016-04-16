@@ -1,14 +1,14 @@
 {
   "name": "uxon",
-  "version": "1.0.0-rc.3",
+  "version": "1.1.0-beta",
   "description": "Uxôn is a JavaScript library for an easier SVG icons management in web applications",
   "main": "dist/uxon.js",
   "scripts": {
     "build": "npm run build-css && npm run build-js",
     "build-css": "./node_modules/.bin/csso lib/makeup.css dist/uxon.css --stat",
     "build-js": "npm run linter && npm run bundle && npm run build-js-sfx",
-    "build-js-sfx": "./node_modules/.bin/jspm build uxon dist/uxon-standalone.js --minify --skip-source-maps --format umd --global-name uxon",
-    "bundle": "./node_modules/.bin/jspm bundle lib/main.js dist/uxon.js --minify",
+    "build-js-sfx": "./node_modules/.bin/jspm build uxon dist/uxon-standalone.js --minify --format umd --global-name uxon",
+    "bundle": "./node_modules/.bin/jspm bundle lib/main.js dist/uxon-bundle.js --minify",
     "linter": "./node_modules/.bin/jshint --verbose ./lib/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -33,16 +33,24 @@
   },
   "homepage": "https://github.com/vuzonp/uxon#readme",
   "devDependencies": {
-    "csso": "^1.5.4",
+    "csso": "^1.7.1",
+    "http-server": "^0.9.0",
     "jshint": "^2.9.1",
-    "jspm": "^0.17.0-beta.5"
+    "jspm": "^0.17.0-beta.11"
   },
   "jspm": {
     "directories": {
       "lib": "lib"
     },
+    "dependencies": {},
     "devDependencies": {
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.2"
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.8"
+    },
+    "peerDependencies": {
+      "core-js": "npm:core-js@^1.2.0",
+      "fs": "github:jspm/nodelibs-fs@^0.2.0-alpha",
+      "path": "github:jspm/nodelibs-path@^0.2.0-alpha",
+      "process": "github:jspm/nodelibs-process@^0.2.0-alpha"
     }
   }
 }

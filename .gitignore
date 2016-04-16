@@ -31,3 +31,6 @@ bower_components
 
 # JSPM / SystemJS
 jspm_packages
+
+# Documentation
+doc/
