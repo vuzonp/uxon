@@ -1,4 +1,4 @@
-# ![Logotype](http://www.thomasgirard.fr/uxon/uxon-beta-logo.png) Uxôn Library
+# ![Logotype](http://www.thomasgirard.fr/uxon/uxon-logo.png) Uxôn Library
 
 **Uxôn is a JavaScript library for an easier SVG icons management in web applications.**
 
