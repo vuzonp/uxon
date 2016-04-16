@@ -42,13 +42,14 @@
     "directories": {
       "lib": "lib"
     },
-    "dependencies": {
-      "weakmap": "npm:weakmap@^0.0.6"
-    },
+    "dependencies": {},
     "devDependencies": {
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.2"
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.8"
     },
     "peerDependencies": {
+      "core-js": "npm:core-js@^1.2.0",
+      "fs": "github:jspm/nodelibs-fs@^0.2.0-alpha",
+      "path": "github:jspm/nodelibs-path@^0.2.0-alpha",
       "process": "github:jspm/nodelibs-process@^0.2.0-alpha"
     }
   }
