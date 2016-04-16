@@ -13,7 +13,7 @@
 - Light.
 
 ## Compatibility
-Uxôn has developed to work with all browsers that support SVG.
+Uxôn has developed to work with all modern browsers that support SVG.
 
 - Chrome / Chromium
 - Edge
@@ -36,7 +36,7 @@ For test it :
 ```sh
 $ ./node_modules/.bin/http-server
 ```
-And load the test.html page !
+And load the *test.html* page !
 
 ---
 You can also play with the old version : [1.0.0-rc.2](https://github.com/vuzonp/uxon/tree/1.0.0)
